@@ -1,0 +1,88 @@
+#!/bin/bash
+######################################################################################################
+# FILENAME: bash_ref.txt
+# TITLE: Bash Reference Page
+# AUTHOR: Chris Olry
+# DATE CREATED: January 2020
+# DESCRIPTION: This is not actually a script! It is a reference page of bash commands.
+# 				I am including it on my portfolio for both my own reference and
+#				Because all of the other scripting I've done is specific to the companies
+#				that I have worked for, and therefore contain proprietary information.
+#
+#				!!!!!!!!! PLEASE DO NOT TRY TO RUN THIS AS A SCRIPT. !!!!!!!!! 
+exit #			I am including this 'exit' so this will *hopefully* bomb out if anyone tries to do so.
+######################################################################################################
+
+#################################
+# Variable Assignment Reference
+################################
+
+boxName=$(hostname)			# Get hostname of *nix box.
+boxNam2=$(uname -n) 		# Different hostname method.
+today=$(date '+%m%d%y')		# Date in mmddyy format.
+ipAddress=$(ifconfig | grep -A 1 'eth0' | tail -1 | cut -d ':' -f 2 | cut -d ' ' -f 1) # Get IP.
+seconds="$(date -u +%s)"	# Get current second.
+YER="$(date +"%Y")"			# Get current year.
+TIME=$(date '+%m%d%H%M%y') 	# Date in mmddHHMMyy format. Used for filenames.
+
+########################
+# Command Reference
+########################
+
+# User input.
+## Press any key to quit.
+read -n1 -r -p "Press any key to quit." key && ext.
+## Menu loop
+while [ "$response" !=  "n" ]; do
+	echo "Do you want something to happen?"
+	read -r -p "Type [Y/N] " response
+		case $response in
+			[Yy])
+				echo "Yes!"
+				;;
+			[Nn])
+				echo "No!" 
+				;;
+			*)
+				echo "Anything else!"
+				;;
+		esac
+done
+# ---------------------------------------------
+# Special 'if' statements.
+## Do if string is found in file.
+if cat $fileName | grep "$someString" > /dev/null ; then echo "Something happens" ;	fi	
+## if AND
+if [ "$something" = "yes" ] && [ "$somethingElse" = "yes" ]; then echo "Something happens" ; fi
+## if OR
+if [ "$something" = "yes" ] || [ "$somethingElse" = "yes" ]; then echo "Something happens" ; fi
+# ---------------------------------------------
+# Special case find & grep
+## Pass input line by to command or program using xargs.
+find $fileNames* -type f -printf "%f\n" | xargs -n 1 $someCommand
+## Grep and write to file in order of items found.
+grep -e '$firstThing'  -e '$secondThing' -e '$thirdThing' $inThisFile >> $writeToThisOne
+# ---------------------------------------------
+# Sed
+## General usage.
+sed 's/$firstThing/$replaceWith/g' $fileName
+## Replace in file.
+sed -i 's/$firstThing/$replaceWith/g' $fileName
+## Remove string
+sed -i 's/$someString//g' $fileName
+## Remove line.
+sed -i '/$someString/ d' $fileName
+## Replace all between
+sed -i 's/$firstString[^~]*$secondString/$newString/g' $outputFile
+# ---------------------------------------------
+# Compression related
+## Unzip tar file.
+tar -zcvf $fileName.tar.gz
+# ---------------------------------------------
+# Other
+## Kill process - brute force method.
+pkill -9 $processName
+## Brute force copy & overwrite. (+v for verbose.)
+yes | cp -afv $file1 $file2
+## Pass 'yes'/'no' to command.
+printf 'y\n\n\n\n' | $someCommand
